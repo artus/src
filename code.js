@@ -7,6 +7,7 @@ class Questioning {
   constructor(set) {
     this.set = set;
     this.askedQuestions = [];
+    this.solutions = set.solutions;
     this.history = [];
     this.score = 0;
     this.count = 0;
@@ -74,15 +75,36 @@ const displayResults = (questioning) => {
   displayHistory(questioning);
 };
 
-const displayNextQuestion = (questioning) => {
+const showSolutions = (questioning, question) => {
   elements.main.innerHTML = "";
-  const nextQuestion = questioning.nextQuestion();
+  const button = document.createElement("button");
+  button.textContent = "Back";
+  button.addEventListener("click", () =>
+    continueQuestions(questioning, question)
+  );
+  elements.main.appendChild(button);
+  const img = document.createElement("img");
+  img.src = questioning.solutions;
+  elements.main.appendChild(img);
+};
+
+const continueQuestions = (questioning, nextQuestion) => {
+  elements.main.innerHTML = "";
   const question = document.createElement("h2");
   question.textContent = nextQuestion.question;
   elements.main.appendChild(question);
 
+  const solutions = document.createElement("button");
+  solutions.textContent = "Show Solutions";
+  solutions.addEventListener("click", () =>
+    showSolutions(questioning, nextQuestion)
+  );
+  elements.main.appendChild(solutions);
+
   const answers = document.createElement("ul");
-  const randomizedAnswers = nextQuestion.answers.sort(() => Math.random() - 0.5);
+  const randomizedAnswers = nextQuestion.answers.sort(
+    () => Math.random() - 0.5
+  );
 
   for (const answer of randomizedAnswers) {
     const item = document.createElement("li");
@@ -100,6 +122,11 @@ const displayNextQuestion = (questioning) => {
   }
 
   elements.main.appendChild(answers);
+};
+
+const displayNextQuestion = (questioning) => {
+  const nextQuestion = questioning.nextQuestion();
+  continueQuestions(questioning, nextQuestion);
 };
 
 const displaySet = (set) => {
