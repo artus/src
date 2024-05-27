@@ -90,7 +90,10 @@ const showSolutions = (questioning, question) => {
 
 const continueQuestions = (questioning, nextQuestion) => {
   elements.main.innerHTML = "";
-  const question = document.createElement("h2");
+  const set = document.createElement("h2");
+  set.textContent = questioning.set.name;
+  elements.main.appendChild(set);
+  const question = document.createElement("h3");
   question.textContent = nextQuestion.question;
   elements.main.appendChild(question);
 
